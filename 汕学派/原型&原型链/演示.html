@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 对应名称
+        // prototype ：原型 
+        // __proto__：内置对象 系统已经定义好的东西 //原型链x（原型的链接点)
+        // 从属关系 ：
+        //     prototype ->函数的一个属性  普通对象 {}
+        //     __proto__ ->对象Object的一个属性 对象{}
+        //     对象的__proto__保存着该对象的构造函数的prototype
+        // var l = {}
+        // var k = {}
+        // console.log(l === k)
+
+        // function Test() {
+        //     this.a = 1
+                // this.b = 333
+                // this.c = 444
+
+        // }
+        // console.log(Test.prototype)
+
+        // var test = new Test()
+            // console.log(test.__proto__)
+
+        //console.log(test.__proto__ === Test.prototype)
+
+        // console.log(Test.prototype.__proto__)
+        // console.log(Test.prototype.__proto__ === Object.prototype)
+        // console.log(Object.prototype.__proto__)
+
+        // Test.prototype.b = 2
+        // Object.prototype.c = 3
+            //     // test{
+            //     //     a:1,
+            //     //     _proto__: Test.prototype ={
+            //     //         b:2,
+            //     //         __proto__: Object.prototype ={
+            //     //             c:3,
+            //     //             __proto__:null
+            //     //         }
+            //     //     }
+            //     // }
+            //     //原型继承
+            // console.log(test.a)
+            // console.log(test.b)
+            // console.log(test.c)
+
+
+        // //Funciton 和 Object  函数 <=>对象
+        //console.log(Test.__proto__)
+        //var Test = new Function()
+        //console.log(Test.__proto__ === Function.prototype)
+
+        // console.log(Function.prototype)
+        // console.log(Function.__proto__)
+        // console.log(Function.__proto__ === Function.prototype)
+        //     // ---》
+        // var obj = {}
+        //     //--> var obj = new Object() //Function 
+        // console.log(typeof Object)
+        // console.log(Object.__proto__)
+        //console.log(Object.__proto__ === Function.prototype)
+        //     // -->  推出
+        // console.log(Object.__proto__ === Function.__proto__)
+
+        // Test2.prototype.sayHi(){
+        //     alert('nihao')
+        // }
+        // var a = new Test2()
+        // var a = new Object()
+        // var b = new Test2()
+
+        // //test --> {a:1}
+        // console.log(test.hasOwnProperty('a'))
+        // console.log(test.hasOwnProperty('b'))
+        // console.log(test.hasOwnProperty('c'))
+
+        // console.log('a' in test)
+        // console.log('b' in test)
+        // console.log('c' in test)
+
+        // console.log(test)
+        //     // test.constructor -> 实例化test对象的构造函数
+        // console.log(test.constructor)
+
+        // function Test1() {
+        //     this.a = 111
+        // }
+        // test.constructor = Test1
+        // console.log(test)
+        //console.log(test instanceof Test)
+        //console.log(Object instanceof Function)
+        // console.log( instanceof )
+        //console.log(Function instanceof Function)
+        //console.log(Function instanceof Object)
+        //console.log(Object instanceof Test)
+        
+        
+    </script>
+</body>
+
+</html>

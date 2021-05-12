@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function KMP() {
+            this.next = []
+            this.p = ''
+            KMP.prototype.getNext = function(p) {
+                this.p = p
+                var p_len = p.length
+                var i = 0
+                var j = -1
+                this.next[0] = -1
+                while (i < p_len) {
+                    if (j == -1 || p[i] == p[j]) {
+                        i++
+                        j++
+                        this.next[i] = j
+                    } else {
+                        j = this.next[j]
+                    }
+                }
+                console.log(this.next)
+            }
+
+
+        }
+        var test = new KMP()
+        test.getNext('ABCDABD')
+    </script>
+</body>
+
+</html>

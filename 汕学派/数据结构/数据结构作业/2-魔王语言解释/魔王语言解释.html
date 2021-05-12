@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function MoWang() {
+            this.queue = []
+            this.stack = []
+            this.strArr = []
+            this.strTemp = ''
+            this.temp = ''
+            this.output = ''
+            MoWang.prototype.translate = function(str) {
+                    this.strArr = str.split('')
+                    this.turnB(this.strArr)
+                    this.strTemp = this.strArr.join('')
+                    this.strArr = this.strTemp.split('')
+                    this.turnA(this.strArr)
+                    this.strTemp = this.strArr.join('')
+                    this.strArr = this.strTemp.split('')
+                    console.log('转换前:' + this.strTemp)
+
+                    //开始
+
+                    var i = 0
+                        //'('之前的字符先入队
+                    while (this.strArr[i] != '(') {
+                        this.enQueue(this.strArr[i])
+                        i++
+                    }
+                    i++
+                    this.temp = this.strArr[i]
+                    i++
+                    //'('之后 ')'之前的字符入栈
+                    this.enStack(this.temp)
+                    while (this.strArr[i] != ')') {
+                        this.enStack(this.strArr[i])
+                        this.enStack(this.temp)
+                        i++
+                    }
+                    i++
+                    //出栈放入队列
+                    while (this.stack.length != 0) {
+                        this.enQueue(this.deStack())
+                    }
+                    //处理')'后的字符 放入队列
+                    for (var j = i; j < this.strArr.length; j++) {
+                        this.enQueue(this.strArr[j])
+                    }
+                    // console.log(this.queue)
+                    //出队 清空队列 获得输出
+                    while (this.queue.length != 0) {
+                        this.output += this.deQueue()
+                    }
+                    console.log('这是输出:' + this.output)
+                    this.strArr = this.output.split('')
+                        // console.log(this.strArr)
+                        //最后翻译成中文
+                    for (var k = 0; k < this.strArr.length; k++) {
+                        switch (this.strArr[k]) {
+                            case 't':
+                                this.strArr[k] = '天'
+                                break
+                            case 'd':
+                                this.strArr[k] = '地'
+                                break
+                            case 's':
+                                this.strArr[k] = '上'
+                                break
+                            case 'a':
+                                this.strArr[k] = '一只'
+                                break
+                            case 'e':
+                                this.strArr[k] = '鹅'
+                                break
+                            case 'z':
+                                this.strArr[k] = '追'
+                                break
+                            case 'g':
+                                this.strArr[k] = '赶'
+                                break
+                            case 'x':
+                                this.strArr[k] = '下'
+                                break
+                            case 'n':
+                                this.strArr[k] = '蛋'
+                                break
+                            case 'h':
+                                this.strArr[k] = '恨'
+                                break
+                            default:
+                                this.strArr[k] = '无'
+                        }
+                    }
+                    this.output = this.strArr.join('')
+                    console.log('完整翻译:' + this.output)
+                }
+                //入队操作
+            MoWang.prototype.enQueue = function(key) {
+                    this.queue.push(key)
+                }
+                //出队操作
+            MoWang.prototype.deQueue = function() {
+                    return this.queue.shift()
+                }
+                //入栈操作
+            MoWang.prototype.enStack = function(key) {
+                    this.stack.push(key)
+                }
+                //出栈操作
+            MoWang.prototype.deStack = function() {
+                return this.stack.pop()
+            }
+            MoWang.prototype.turnB = function(strArr) {
+
+                for (var i = 0; i < strArr.length; i++) {
+                    if (strArr[i] == 'B') {
+                        strArr[i] = 'tAdA'
+                    }
+                }
+            }
+            MoWang.prototype.turnA = function(strArr) {
+                for (var i = 0; i < strArr.length; i++) {
+                    if (strArr[i] == 'A') {
+                        strArr[i] = 'sae'
+                    }
+                }
+            }
+        }
+        var test = new MoWang()
+        test.translate('B(ehnxgz)B')
+    </script>
+</body>
+
+</html>

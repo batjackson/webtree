@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    button {
+        height: 30px;
+    }
+</style>
+
+<body>
+    <input type="file" id="fileInput">
+    <button id='btn'>获取结果</button>
+
+    <script>
+        //kmp算法
+        var kmpGetPartMatchLen = function(str) {
+            var partMatch = [];
+            for (var i = 0; i < str.length; i++) {
+                var prefix = "",
+                    suffix = "";
+                var newStr = str.slice(0, i + 1);
+                if (newStr.length <= 1) {
+                    partMatch[i] = 0;
+                } else {
+                    //判断前后缀是否相同
+                    for (var j = 0; j < i; j++) {
+                        prefix = newStr.slice(0, j + 1);
+                        suffix = newStr.slice(-j - 1); //利用负参数尾巴开始取
+                        if (prefix === suffix) {
+                            partMatch[i] = prefix.length;
+                        }
+                    }
+                    //不存在检测
+                    partMatch[i] = partMatch[i] ? partMatch[i] : 0;
+                }
+            }
+            // console.log(partMatch)
+            return partMatch;
+        };
+        var kmp = function(sourceStr, subStr) {
+            var partMatch = kmpGetPartMatchLen(subStr);
+            var result = false;
+
+            for (var i = 0; i < sourceStr.length; i++) {
+                for (var j = 0; j < subStr.length; j++) {
+                    if (subStr.charAt(j) === sourceStr.charAt(i + j)) {
+                        if (j === subStr.length - 1) {
+                            result = true;
+                            break;
+                        }
+                    } else {
+                        //实现回滚,以subStr为参照物，即sourceStr往前移动
+                        if (j > 0 && partMatch[j - 1] >= 0) {
+                            //公式在此处实现
+                            i += (j - 1 - partMatch[j - 1] - 1);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                if (result) break;
+            }
+
+            if (result) {
+                return i;
+            } else {
+                return -1;
+            }
+        };
+        // console.log(kmp('01234ababd', 'ababd'))
+
+        var txt = '' //需要获取的文本
+            //从txt文件中获取文本
+        document.getElementById('fileInput').addEventListener('change', function selectedFileChanged() {
+            if (this.files.length == 0) {
+                console.log('请选取文件')
+                return
+            }
+            const reader = new FileReader()
+            reader.onload = function fileReadComplete() {
+
+                // console.log(reader.result)
+                txt = reader.result.toLowerCase()
+                console.log(reader.result)
+
+            }
+            reader.readAsText(this.files[0])
+
+        })
+        document.getElementById('btn').addEventListener('click', function showTxt() {
+            test.splitLine(txt) //分行
+                //console.log(txtLineArr)
+            test.getAllWords(txt)
+        })
+        var txtLineArr = [] //把文本以行的形式放进数组中 一个下标对应一行里的文字
+        var allWordsArr = [] //所有词的数组 一个下标对应一个词
+
+        function Assistant() {
+            //分行
+            Assistant.prototype.splitLine = function(txt) {
+                txtLineArr = txt.split('\n')
+            }
+            this.allWordsArr = []
+            this.tempTxt = ''
+            this.wordSet = {} // 存放所有词的集合
+                //获取所有的词
+            Assistant.prototype.getAllWords = function(txt) {
+                this.allWordsArr = txt.split('')
+                for (var i = 0; i < this.allWordsArr.length; i++) {
+                    switch (this.allWordsArr[i]) {
+                        case '.':
+                            this.allWordsArr[i] = ' '
+                            break
+                        case ',':
+                            this.allWordsArr[i] = ' '
+                            break
+                        case '?':
+                            this.allWordsArr[i] = ' '
+                            break
+                        case '!':
+                            this.allWordsArr[i] = ' '
+                            break
+                        case '\n':
+                            this.allWordsArr[i] = ' '
+                            break
+                        default:
+                            this.allWordsArr[i] = this.allWordsArr[i]
+                            break
+                    }
+                }
+                this.tempTxt = this.allWordsArr.join('')
+                this.allWordsArr = this.tempTxt.split(' ')
+                    // console.log(this.allWordsArr)
+                for (var i = 0; i < this.allWordsArr.length; i++) {
+
+                    if (this.wordSet.hasOwnProperty(this.allWordsArr[i])) {
+                        this.wordSet[this.allWordsArr[i]].times++ //如果集合中已经有了这个词，那么次数加1
+                    } else { //没有的话就往集合中添加这个词
+                        var wordObj = {
+                            times: 1, //第一次添加 次数为1
+                            line: [] //把出现该词的行的位置存到该词对象的数组里
+                        }
+                        for (var j = 0; j < txtLineArr.length; j++) {
+                            var line = 0
+                            if (kmp(txtLineArr[j], this.allWordsArr[i]) != -1) {
+                                line = j + 1
+                                if (line) {
+                                    wordObj['line'].push(line) //把第几行的编号放进数组
+                                }
+                            }
+                        }
+                        this.wordSet[this.allWordsArr[i]] = wordObj //存放到词的集合中
+                    }
+                }
+                //console.log(txtLineArr)
+                //打印结果
+                delete this.wordSet['']
+                console.log(this.wordSet)
+            }
+        }
+        var test = new Assistant()
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<!-- //4、算法设计：利用两个栈S1/ S2模拟一个队列，已知栈的4个运算定义如下：1）Push(S,x); //元素x入栈S ；2）Pop(S,x); 
+//S出栈并将出栈的值赋给x；3） StackEmpty(S); //判断栈是否为空；4） StackOverflow(S); //判断栈是否满。
+要求：利用栈的运算来实现该队列的3个运算：1）Enqueue; //将元素x入队 ；
+2）Dequeue; //出队，并将出队元素存储在x中；3）QueueEmpty; //判断队列是否为空 -->
+
+<body>
+    <script>
+        //两个栈模拟队列
+        function Queue() { //构造队列构造函数
+            this.S1 = [] //用数组创建两个栈
+            this.S2 = []
+            Queue.prototype.Enqueue = function(x) {
+                this.S1.push(x) //把值压入栈S1中
+            }
+            Queue.prototype.Dequeue = function() {
+                    while (this.S1.length) {
+                        this.S2.push(this.S1.pop()) //把S1栈顶元素压入栈S2
+                    }
+                    var x = this.S2.pop() //此时栈S2的栈顶元素则为队列队首元素
+                    while (this.S2.length) {
+                        this.S1.push(this.S2.pop()) //把S2的元素全部重新压回S1
+                    }
+                    return x
+                }
+                //判断队列是否为空
+            Queue.prototype.QueueEmpty = function() {
+                return !this.S1.length
+            }
+        }
+        var testQ = new Queue() //实例化队列
+        testQ.Enqueue(1)
+        testQ.Enqueue(2)
+        testQ.Enqueue(3)
+        testQ.Enqueue(4)
+        console.log(testQ.Dequeue())
+        console.log(testQ.Dequeue())
+        console.log(testQ.Dequeue())
+        console.log(testQ.Dequeue())
+        console.log(testQ.QueueEmpty())
+    </script>
+</body>
+
+</html>

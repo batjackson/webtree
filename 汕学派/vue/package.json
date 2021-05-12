@@ -1,0 +1,26 @@
+{
+    "name": "vue",
+    "version": "1.0.1",
+    "description": "this is a test vue",
+    "main": "index.js",
+    "scripts": {
+        "test": "dir"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git"
+    },
+    "keywords": [
+        "edu",
+        "work",
+        "vue"
+    ],
+    "author": "batjackson",
+    "license": "MIT",
+    "dependencies": {
+        "jquery": "^3.6.0"
+    },
+    "devDependencies": {
+        "bootstrap": "^5.0.0"
+    }
+}

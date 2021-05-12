@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id='app'>
+        {{massage}}
+    </div>
+    <div class="" id="vm">{{a}}--{{b}}---{{c}}</div>
+    <div id="app1">
+        <p>{{foo}}</p>
+        <!-- 这里的 `foo` 不会更新！ -->
+        <button v-on:click="foo = 'baz'">Change it</button>
+    </div>
+    <script type='text/javascript'>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                massage: 'Hello world',
+                name: 'vue'
+            }
+        });
+        var data = {
+            a: 1,
+            b: 2,
+            c: 110
+
+        }
+        var vm = new Vue({
+            el: '#vm',
+            data: data
+        })
+
+        vm.c = 3 //不会出现 因为是后来加上去的 
+            // 值得注意的是只有当实例被创建时就已经存在于 data 中的 property 才是响应式的。也就是说如果你添加一个新的 property，比如：
+        Object.freeze(data) //不会再跟踪变化
+        data.b = 5
+
+        var obj = {
+            foo: 'fuck'
+        }
+        Object.freeze(obj) //不会再跟踪变化
+        var app1 = new Vue({
+            el: '#app1 ',
+            data: obj
+        })
+    </script>
+</body>
+
+</html>

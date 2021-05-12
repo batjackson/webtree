@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // function Queue() {
+        //     var items = []
+        //     Queue.prototype.enqueue = function(element) {
+        //         this.items.push(element)
+        //     }
+        //     Queue.prototype.dequeue = function() {
+        //         return this.items.shift()
+        //     }
+        //     Queue.prototype.size = function() {
+        //         return items.length
+        //     }
+        //     Queue.prototype.isEmpty = function() {
+        //         return this.items.length == 0
+        //     }
+        //     Queue.prototype.front = function() {
+        //         return this.items[0]
+        //     }
+        //     Queue.prototype.toString = function() {
+        //         var str = items.join(',')
+        //         return str
+        //     }
+        // }
+        function Queue() {
+            this.items = []
+                //1.将元素加入队列中
+                Queue.prototype.enqueue = function(element) {
+                    this.items.push(element)
+                }
+                //2.从队列中删除前端元素
+                Queue.prototype.dequeue = function() {
+                    return this.items.shift()
+                }
+                //3.查看前端的元素
+                Queue.prototype.front = function() {
+                    return this.items[0]
+                }
+                //4.查看队列是否为空
+                Queue.prototype.isEmpty = function() {
+                    return this.items.length == 0
+                }
+                //5.查看队列中元素的个数
+                Queue.prototype.size = function() {
+                    return this.items.length
+                }
+                //6.toString方法
+                Queue.prototype.toString = function() {
+                    var str = this.items.join(',')
+                    return str
+                }
+            }
+        //面试题 击鼓传花
+        function passGame(nameList, num) {
+            var q = new Queue()
+
+            for (var i = 0; i < nameList.length; i++) {
+                q.enqueue(nameList[i])
+            }
+            while (q.size() > 1) {
+                for (var j = 0; j < num - 1; j++) {
+
+                    q.enqueue(q.dequeue())
+                }
+                q.dequeue()
+            }
+            alert(q.size())
+            var endName = q.front()
+            alert('end name=' + endName)
+            return nameList.indexOf(endName)
+        }
+        // name = ['科', '撒', '墨', '傻', '是', '在']
+        // passGame(name, 5)
+        // function passGame(nameList, num) {
+        //     var queue = new Queue()
+        //     for (var i = 0; i < nameList.length; i++) {
+        //         queue.enqueue(nameList[i])
+        //     }
+        //     while (queue.size() > 1) {
+        //         for (var i = 0; i < num - 1; i++) {
+        //             queue.enqueue(queue.dequeue())
+        //         }
+        //         queue.dequeue()
+        //     }
+        //     alert(queue.size())
+        //     var endName = queue.front()
+        //     alert('end name=' + endName)
+        //     return nameList.indexOf(endName)
+        // }
+        nameList = ['lili', 'lucy', 'tom', 'lilei', 'why']
+        alert(passGame(nameList, 5))
+    </script>
+</body>
+
+</html>

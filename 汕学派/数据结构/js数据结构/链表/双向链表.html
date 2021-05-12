@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		//封装双向链表
+		function DoubleLinkedList(){
+			//属性
+
+			function Node(data){
+				this.data = data
+				this.prev = null
+				this.next = null
+			}
+			this.head= null
+			this.tail = null
+			this.length = 0
+			//1.尾部添加
+			DoubleLinkedList.prototype.append=function(data)
+			{
+				var newnode = new Node(data)
+				if(this.length ==0){
+					this.head = newnode
+					this.tail = newnode
+				}else{
+					newnode.prev=this.tail
+					this.tail.next = newnode
+					this.tail = newnode
+				}
+
+				this.length++
+			}
+			//2.将链表转换成字符串形式
+			DoubleLinkedList.prototype.toString=function(){
+				return this.backwardString()
+			}
+			//2.1 forwardString方法
+			DoubleLinkedList.prototype.forwardString =function(){
+				var current =this.tail
+				var result=''
+				while(current){
+					result+=current.data+' '
+					current=current.prev
+				}
+				return result
+			}
+			//2.2 backwardString方法
+			DoubleLinkedList.prototype.backwardString =function(){
+				var current =this.head
+				var result = ''
+
+				while(current){
+					result+=current.data +' '
+					current=current.next
+				}
+				return result
+			}
+			//3. insert方法
+			DoubleLinkedList.prototype.insert=function(position,data){
+				if (position<0||position>this.length) {return false}
+
+					var newnode = new Node(data)
+				if(this.length==0){
+					this.head = newnode
+					this.tail = newnode	
+				}else{
+					//3.1判断postion是否为0
+					if(position==0){
+						this.head.prev=newnode
+						newnode.next=this.head
+						this.head=newnode
+					}else if(position==this.length){
+						this.tail.next = newnode
+						newnode.prev=this.tail
+						this.tail = newnode
+					}
+					else{
+						var current = this.head
+						var index = 0
+						while(index++ <position){
+							current=current.next
+						}
+						newnode.next=current
+						newnode.prev=current.prev
+						current.prev.next=newnode
+						current.prev = newnode
+					}
+
+				}
+				this.length++
+
+			}
+			//4. get方法
+			DoubleLinkedList.prototype.get=function(data){
+				if(position<0||position>=this.length){
+					return false
+				}
+
+				var index=0
+				var current = this.head
+				while(index++ <position){
+					current=current.next
+				}
+				return current.data
+			}
+		//5 indexOf 
+		DoubleLinkedList.prototype.indexOf=function(data){
+			var current = this.head
+			var index=0
+			while(current){
+				if(current.data==data){
+					return index
+				}else{
+					current=current.next
+					index++
+				}
+
+			}
+			return -1
+		}
+			//6 update方法
+			DoubleLinkedList.prototype.update=function(position,newdata){
+				if(position<0||position>=this.length){
+					return false
+				}
+				var current=this.head
+				var index  = 0
+				while(index++<position){
+					current=current.next
+				}
+				current.data=newdata
+				return true
+			}
+
+		//7 removeAt方法
+		DoubleLinkedList.prototype.removeAt=function(position){
+			if(position<0||position>=this.length||this.length==0){
+				return false
+			}
+			var current = this.head
+			if(this.length==1){
+				this.head=null
+				this.tail=null
+			}else{
+				if(position==0){
+					this.head.next.prev=null
+					this.head=this.head.next
+
+				}else if(position==this.length-1){
+					current=this.tail
+					this.tail.prev.next=null
+					this.tail=this.tail.prev
+				}else {
+					var index = 0		
+
+					while(index++<position){
+						current=current.next
+					}
+					current.prev.next = current.next
+					current.next.prev = current.prev
+
+				}
+				this.length--
+				return current.data
+			}
+		}
+		//8 remove 方法
+		DoubleLinkedList.prototype.remove=function(data){
+			var index = this.indexOf(data)
+			return this.removeAt(index)
+		}
+		//9 isEmpty 
+		DoubleLinkedList.prototype.isEmpty = function(){
+			return this.length==0
+		}
+
+		// 10 size 方法
+		DoubleLinkedList.prototype.size = function(){
+			return this.length
+		}
+
+		DoubleLinkedList.prototype.getHead =function(){
+			return this.head.data
+		}
+		DoubleLinkedList.prototype.getTail=function(){
+			return this.tail.data
+		}
+	}
+
+
+	var list = new DoubleLinkedList()
+
+		//1 append
+		list.append('abc')
+		list.append('cba')
+		list.append('nba')
+		list.append('123')
+		list.insert(0,'000')
+		list.insert(list.length,'555')
+		list.insert(2,'333')
+		alert(list.toString())
+		alert(list.update(0,'111'))
+		alert(list.indexOf('333'))
+		alert(list.removeAt(1))
+		list.remove('123')
+		alert(list.toString())
+
+		//alert(list.forwardString())
+
+	</script>
+</body>
+</html>

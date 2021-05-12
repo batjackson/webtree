@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 设计一个算法,
+        // 将含有n个元素的整数数组A[0…n-1]的元素循环右移m(1≤m<n)位。要求算法的空间复杂度为O(1)。
+        function RightLoop() {
+            this.a = []
+            this.l = 0
+            this.m = 0
+            RightLoop.prototype.tran = function(a, m) {
+                this.a = a
+                this.l = a.length
+                this.m = m
+                if (this.m > this.l) {
+                    this.m = this.m % this.l
+                }
+                this.reverse(0, this.l - 1)
+                this.reverse(0, this.m - 1)
+                this.reverse(this.m, this.l - 1)
+                console.log(this.a)
+            }
+            RightLoop.prototype.reverse = function(l, r) {
+                var temp = 0
+                var k = 0
+                var i = l
+
+                while (i < (r - k)) {
+                    temp = this.a[i]
+                    this.a[i] = this.a[r - k]
+                    this.a[r - k] = temp
+                    i++
+                    k++
+                }
+            }
+        }
+        var a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        var test = new RightLoop()
+        test.tran(a, 2)
+    </script>
+</body>
+
+</html>

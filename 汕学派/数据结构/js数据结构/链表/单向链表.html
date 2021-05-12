@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function LinkedList() {
+            function Node(data, next) {
+                this.data = data
+                this.next = null
+            }
+            this.head = null
+            this.length = 0
+                //1.追加方法
+            LinkedList.prototype.append = function(data) {
+                    if (this.length == 0) {
+                        var newnode = new Node(data)
+                        this.head = newnode
+                    } else {
+                        var newnode = new Node(data)
+                        var current = this.head
+                        while (current.next) {
+                            current = current.next
+                        }
+                        current.next = newnode
+                    }
+                    this.length += 1
+                }
+                //2.toString fangfa
+            LinkedList.prototype.toString = function() {
+                    var current = this.head
+                    var listString = ""
+                    while (current) {
+                        listString += current.data + " "
+                        current = current.next
+                    }
+                    return listString
+                }
+                //3. insert 方法
+            LinkedList.prototype.insert = function(position, data) {
+                    //1.对position进行越界判断
+                    if (position < 0 || position > this.length) {
+                        return false
+                    }
+                    //2.根据data创建newnode
+                    var newnode = new Node()
+                    newnode.data = data
+                    if (position == 0) {
+                        newnode.next = this.head
+                        this.head = newnode
+                    } else {
+                        var index = 0
+                        var current = this.head
+                        while (index < position - 1) {
+                            current = current.next
+                            index++
+                        }
+                        newnode.next = current.next
+                        current.next = newnode
+                    }
+                    this.length++
+                }
+                //4 get方法
+            LinkedList.prototype.get = function(position) {
+                    if (position < 0 || position >= this.length) {
+                        return null
+                    }
+                    var current = this.head
+                    var index = 0
+                    while (index < position) {
+                        current = current.next
+                        index++
+                    }
+                    return current.data
+                }
+                //5 index方法
+            LinkedList.prototype.indexOf = function(data) {
+                    var current = this.head
+                    var index = 0
+                    while (current) {
+                        if (current.data == data) {
+                            return index
+                        }
+                        current = current.next
+                        index++
+                    }
+                    return -1
+                }
+                //6 upadte方法
+            LinkedList.prototype.update = function(positon, newData) {
+                    if (positon < 0 || positon > this.length) {
+                        return false
+                    }
+                    var current = this.head
+                    var index = 0
+                    while (index++ < positon) {
+                        current = current.next
+                    }
+                    current.data = data
+                }
+                //7 removeAt方法
+            LinkedList.prototype.removeAt = function(position) {
+                    if (position < 0 || position >= this.length) {
+                        return false
+                    }
+                    var current = this.head
+                    if (position == 0) {
+                        this.head = this.head.next
+                    } else {
+                        var index = 0
+
+                        while (index++ < position - 1) {
+                            current = current.next
+                        }
+                        current.next = current.next.next
+                        this.length -= 1
+                        return current.next.data
+                    }
+                }
+                //8 remove方法
+            LinkedList.prototype.remove = function(data) {
+                    var position = this.indexOf(data)
+
+                    return this.removeAt(position)
+                }
+                //9 isEmpty方法
+            LinkedList.prototype.isEmpty = function() {
+                    return !this.length
+                }
+                //10 size方法
+            LinkedList.prototype.size = function() {
+                return this.length
+            }
+        }
+        var list = new LinkedList()
+        list.append('acn')
+        list.append('acn')
+        list.append('acn')
+        list.append('acn')
+        list.append('acn')
+            //alert(list.toString())
+        list.insert(0, '111')
+        list.insert(2, '222')
+        list.insert(3, '333')
+        alert(list.toString())
+            // alert(list.get(0))
+            // alert(list.indexOf('111'))
+        list.remove('222')
+        alert(list.removeAt(1))
+        alert(list.toString())
+    </script>
+</body>
+
+</html>

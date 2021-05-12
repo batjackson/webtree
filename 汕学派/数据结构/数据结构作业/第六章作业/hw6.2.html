@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //1、分别针对顺序存储和链式存储的二叉树，按层次遍历输出:
+        // 顺序存储二叉树的特点：
+
+        // 顺序二叉树通常只考虑完全二叉树。
+        // 第n个元素的左子结点为 2*n+1。
+        // 第n个元素的右子结点为 2*n+2。
+        // 第n个元素的父结点为（n-1）/2。
+        // n表示二叉树中的第几个元素（按0开始编号）。
+
+        // 第1层:
+        // 第2层:
+        // 第3层: 
+        // 2、用按层次顺序遍历二叉树的方法，统计树中具有度为1的结点数目。
+        // 3、求任意二叉树中第一条最长的路径长度，并输出此路径上各结点的值。
+        // 4、输出二叉树中从每个叶子结点到根结点的路径。
+        function OrderBinarySearchTree() {
+            this.arr = []
+            this.length = 0
+
+            OrderBinarySearchTree.prototype.insert = function(key) {
+                if (this.length == 0) {
+                    this.arr[0] = key
+                    this.length = this.arr.length
+                    return
+                }
+                for (var i = 0; i < this.length; i++) {
+                    if (key < this.arr[i]) {
+                        for (var j = this.length; j > i; j--) {
+                            this.arr[j] = this.arr[j - 1]
+                        }
+                        this.arr[i] = key
+                        this.length++
+                            return
+                    }
+
+                }
+                this.arr[this.length] = key
+                this.length++
+            }
+            OrderBinarySearchTree.prototype.levelTraversal = function() {
+                var level = Math.ceil(Math.log2(this.arr.length + 1))
+                for (var i = 1; i <= level; i++) {
+                    var newarr = this.arr.slice(Math.pow(2, i - 1) - 1, Math.pow(2, i) - 1)
+                    console.log('第' + i + '层:' + newarr);
+                }
+            }
+        }
+
+        function ChianBinarySearchTree() {
+            function Node(key) {
+                this.key = key
+                this.left = null
+                this.right = null
+            }
+            this.length = 0
+            this.root = null
+            this.arr = []
+            this.queue = []
+            ChianBinarySearchTree.prototype.insert = function(key) {
+                var newnode = new Node(key)
+                if (this.root == null) {
+                    this.root = newnode
+                    this.level = 1
+                    this.length++
+                } else {
+                    this.insertNode(this.root, newnode)
+                    this.length++
+                }
+            }
+            this.depth = 0
+            ChianBinarySearchTree.prototype.countDepth = function() {
+                    this.depth = this.Depth(this.root)
+                }
+                // this.depthVal = 0
+                // this.depthRight = 0
+                // this.depthLeft = 0
+            var depthVal = 0
+            var depthRight = 0
+            var depthLeft = 0
+            ChianBinarySearchTree.prototype.Depth = function(node) {
+
+                if (node == null) {
+                    depthVal = 0
+                } else {
+                    depthLeft = this.Depth(node.left)
+                    depthRight = this.Depth(node.right)
+                    depthVal = 1 + (depthLeft > depthRight ? depthLeft : depthRight)
+
+                }
+                return depthVal
+            }
+            this.longest = []
+            ChianBinarySearchTree.prototype.Long = function(node) {
+                if (node != null) {
+                    this.longest.push(node.key)
+                    if (this.Depth(node.left) > this.Depth(node.right)) {
+                        this.Long(node.left)
+                    } else {
+                        this.Long(node.right)
+                    }
+                }
+            }
+            this.allPath = []
+            this.ptr1 = 0
+            ChianBinarySearchTree.prototype.AllPath = function(node) {
+
+                if (node != null) {
+                    this.allPath.push(node.key)
+                    if (node.left == null && node.right == null) {
+                        console.log(this.allPath)
+                        this.allPath.pop()
+                        this.ptr1 = 1
+                        return
+                    } else {
+                        if (node.left != null) {
+                            this.AllPath(node.left)
+                        }
+                        if (node.right != null) {
+                            this.AllPath(node.right)
+                        }
+                        if (this.ptr1 == 1) {
+                            this.allPath.pop()
+                        }
+                        if (node.left != null && node.right != null) {
+                            this.ptr1--
+                        }
+
+                    }
+                }
+            }
+            ChianBinarySearchTree.prototype.getAllPath = function() {
+                this.AllPath(this.root)
+            }
+            ChianBinarySearchTree.prototype.getLongest = function() {
+                this.Long(this.root)
+                console.log('最长的长度为:' + this.longest.length)
+                console.log('最长的路径为:' + this.longest)
+            }
+            ChianBinarySearchTree.prototype.insertNode = function(node, newnode) {
+                if (newnode.key < node.key) {
+                    if (node.left == null) {
+                        node.left = newnode
+                    } else {
+                        this.insertNode(node.left, newnode)
+
+                    }
+                } else {
+                    if (node.right == null) {
+                        node.right = newnode
+                    } else {
+                        this.insertNode(node.right, newnode)
+
+                    }
+                }
+            }
+            ChianBinarySearchTree.prototype.levelTraversal = function() {
+                this.levelTraversalNode()
+                    // var level = Math.ceil(Math.log2(this.arr.length + 1))
+                console.log('共有' + this.depth + '层')
+                console.log('层次遍历结果:' + this.arr)
+            }
+
+            ChianBinarySearchTree.prototype.levelTraversalNode = function() {
+                this.queue[0] = this.root
+                var p = null
+                while (this.queue.length != 0) {
+                    p = this.queue.shift()
+                    this.arr.push(p.key)
+                    if (p.left != null) {
+                        this.queue.push(p.left)
+                    }
+                    if (p.right != null) {
+                        this.queue.push(p.right)
+                    }
+                }
+            }
+            this._1_degree = 0
+            ChianBinarySearchTree.prototype.levelTraversal_1_Degree_Node = function() {
+                this.queue[0] = this.root
+                var p = null
+                while (this.queue.length != 0) {
+                    p = this.queue.shift()
+                    this.arr.push(p)
+                    if (p.left != null) {
+                        this.queue.push(p.left)
+                    }
+                    if (p.right != null) {
+                        this.queue.push(p.right)
+                    }
+                }
+                for (var i = 0; i < this.arr.length; i++) {
+                    if (this.arr[i].right != null && this.arr[i].left == null) {
+                        this._1_degree++
+                    }
+                    if (this.arr[i].right == null && this.arr[i].left != null) {
+                        this._1_degree++
+                    }
+                }
+                console.log('度为1的节点个数为' + this._1_degree)
+            }
+
+        }
+        var obst = new OrderBinarySearchTree()
+        obst.insert(1)
+        obst.insert(3)
+        obst.insert(2)
+        obst.insert(4)
+        obst.insert(6)
+        obst.insert(5)
+        obst.insert(7)
+        obst.levelTraversal()
+        var obst2 = new ChianBinarySearchTree()
+        obst2.insert(4)
+        obst2.insert(2)
+        obst2.insert(3)
+        obst2.insert(1)
+        obst2.insert(9)
+        obst2.insert(6)
+        obst2.insert(7)
+        obst2.insert(8)
+        obst2.insert(10)
+
+        // obst2.insert(3)
+        // obst2.insert(1)
+        // obst2.insert(2)
+        // obst2.insert(3)
+        // obst2.insert(4)
+        // obst2.insert(5)
+        // obst2.insert(6)
+        // obst2.insert(7)
+        obst2.countDepth()
+            // console.log(obst2.depth)
+        obst2.levelTraversal()
+        obst2.levelTraversal_1_Degree_Node()
+        obst2.getLongest()
+        obst2.getAllPath()
+            // console.log(obst2._1_degree)
+            // console.log(obst.arr);
+            // console.log(obst.length);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 3、算法设计：假设以带头结点的循环链表表示队列，并且只设一个指针指向队尾元素结点(注意不设头指针) ，
+    试编写相应的置空队、判队空 、入队和出队等算法。
+
+提示：置空队就是建立一个头节点，并把头尾指针都指向头节点，头节点是不存放数据的；判队空就是当头指针等于尾指针时，队空；入队时，
+将新的节点插入到链队列的尾部，同时将尾指针指向这个节点；出队时，删除的是队头节点，要注意队列的长度大于1还是等于1的情况，
+这个时候要注意尾指针的修改，如果等于1，则要删除尾指针指向的节点。 -->
+
+    <script>
+        function CircularQueue() {
+
+            function Node(data) { //节点构造函数
+                this.data = data
+                this.next = null
+                this.pre = null
+            }
+            this.head = null //头指针指向空
+            this.tail = null //尾指针指向空
+            this.length = 0 //队列长度初始为0
+                //1.置队空
+            CircularQueue.prototype.initCQueue = function() {
+                    var headnode = new Node()
+                    this.head = headnode
+                    this.tail = headnode
+                }
+                //2.判队空
+            CircularQueue.prototype.isEmpty = function() {
+                    return !this.length //空返回1 非空返回0
+                }
+                //3.入队
+            CircularQueue.prototype.enCQueue = function(data) {
+                    var newnode = new Node(data)
+                    newnode.next = this.head //新节点的next指向头节点
+                    newnode.pre = this.tail //新节点的pre指向原尾部节点
+                    this.tail.next = newnode //原队尾的next指向新节点
+                    this.head.pre = newnode //头节点的pre指向新的尾节点
+                    this.tail = newnode //尾部指针指向新的尾部节点 完成入队操作
+                    this.length++ //长度加一
+                }
+                //4.出队列
+            CircularQueue.prototype.deCQueue = function() {
+                if (this.isEmpty()) {
+                    return false //如果是队列本来是空的 返回false
+                }
+                var temp = 0
+                if (this.length == 1) {
+                    temp = this.head.next.data //取出队首节点值
+                    this.head.next = null //头节点的next指向空
+                    this.head.pre = null //头节点的pre指向空
+                    this.tail.pre = null //尾节点的pre指向空
+                    this.tail.next = null //尾节点的next指向空
+                    this.tail = this.head //尾指针指向头节点
+                } else {
+                    temp = this.head.next.data //取出队首节点值
+                    this.head.next.next.pre = this.head //队首的下一个节点的pre指向头节点
+                    this.head.next = this.head.next.next //头节点的next指向队首节点的下一个节点
+                }
+                this.length--
+                    return temp //返回队首元素值
+            }
+        }
+        //测试
+        var testCQ = new CircularQueue() //实例化循环链表队列
+        testCQ.initCQueue() //置空队
+        testCQ.enCQueue(1)
+        testCQ.enCQueue(2)
+        testCQ.enCQueue(3)
+        testCQ.enCQueue(4)
+        console.log(testCQ.deCQueue())
+        console.log(testCQ.deCQueue())
+        console.log(testCQ.deCQueue())
+        console.log(testCQ.deCQueue())
+        console.log(testCQ.isEmpty()) //全部出栈 应返回true
+    </script>
+</body>
+
+</html>

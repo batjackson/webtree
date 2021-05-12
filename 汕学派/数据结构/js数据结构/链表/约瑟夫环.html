@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function JosephRing() {
+            function Node(person) { //链表节点的构造函数
+                this.person = {
+                    password: person['password'], //获取当前人的密码
+                    num: person['num'] //获取当前人序号
+                }
+                this.next = null //next指针   　       
+            }
+
+            this.head = null //头指针
+            this.tail = null //尾指针
+            this.length = 0 //链表长度
+            this.m = 0 //m的值
+                //1.创建这个队列 输入所有的人 以及获得初始的m
+            JosephRing.prototype.creatQueue = function(personlist, m) {
+                    this.m = m
+                    for (var i = 0; i < personlist.length; i++) { //把名单的人依次放入链表中
+
+                        var newnode = new Node(personlist[i]) //实例化新节点
+                        if (this.length == 0) { //如果原来链表为空
+                            this.head = newnode //头指针指向新节点
+                            this.tail = newnode //尾指针指向新节点
+
+                        } else {
+                            newnode.next = this.head //插入新节点到尾部 新节点的next指向头节点
+                            this.tail.next = newnode //原来尾节点的next指向新节点
+                            this.tail = newnode //尾指针指向新节点
+                        }
+                        this.length++ //链表长度加一
+                    }
+                }
+                //2.游戏开始
+            JosephRing.prototype.beginGame = function() {
+
+                var arr = [] //存放输出的数组
+                var p = this.head //创建一个临时指针p
+                var pre = null //创建一个临时指针pre指向p前面的一个节点
+                var m = this.m //创建一个该作用域内的临时变量m用来替代原本的m值
+                var length = this.length //创建一个该作用域内的临时变量length用来替代原本的length值
+                var i = 0 //计数器i
+                while (length) { //当原本的链表不为空的时候继续进行这个过程
+                    while (m > 1) { //当m大于1的时候 链表往后遍历
+                        pre = p
+                        p = p.next
+                        m--
+                    }
+                    arr[i] = p.person['num'] //找到要淘汰的人 获取其num 放在对应的数组位置中
+                    m = p.person['password'] //获取其password
+                    pre.next = p.next //该人的前一个节点的next指向该人的下一个节点 
+                    p = p.next //把p指针指向该人的后一个人 准备开始下一轮淘汰 到此 这个人已经在循环链表中被删除 
+                    length-- //链表
+                    i++ //计数器加1
+                }
+                return arr //返回最终得出的num顺序表
+            }
+        }
+        //测试
+        var personlist = [{ //创建一个名单表，每个人都是一个包含passw和num的对象 存储在数组中
+            password: 3,
+            num: 1
+        }, {
+            password: 1,
+            num: 2
+        }, {
+            password: 7,
+            num: 3
+        }, {
+            password: 2,
+            num: 4
+        }, {
+            password: 4,
+            num: 5
+        }, {
+            password: 8,
+            num: 6
+        }, {
+            password: 4,
+            num: 7
+        }]
+        var test = new JosephRing() //实例化约瑟夫环
+        var m = 6 //m值的设定
+        test.creatQueue(personlist, m) //传入名单和m值 构建循环链表
+        console.log(test.beginGame()) //开始游戏 得出最后的num名单
+    </script>
+</body>
+
+</html>
