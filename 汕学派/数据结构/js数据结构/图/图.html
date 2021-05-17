@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="dist.js"></script>
+    <script src="queue.js"></script>
+    <script>
+        //封装图结构
+        function Graph() {
+            //属性: 顶点（数组）/边（字典）
+            this.vertexes = []; //顶点
+            this.edges = new Dictionary(); // 边
+            //方法
+            //添加方法
+            //1 添加顶点的方法
+            Graph.prototype.addVertex = function(v) {
+                    this.vertexes.push(v);
+                    this.edges.set(v, []); //顶点进来的时候，先创建一个空的数组
+                }
+                //2 添加边的方法
+            Graph.prototype.addEdge = function(v1, v2) {
+                this.edges.get(v1).push(v2); //有向图 a->b
+                this.edges.get(v2).push(v1);
+            }
+
+            //实现toString 方法
+            Graph.prototype.toString = function() {
+                    //1.定义字符串
+                    var result = '';
+
+                    //2，遍历所有顶点，以及顶点所对应的边
+                    for (var i = 0; i < this.vertexes.length; i++) {
+                        result += this.vertexes[i] + '->';
+                        var vEdges = this.edges.get(this.vertexes[i]);
+                        for (var j = 0; j < vEdges.length; j++) {
+                            result += vEdges[j] + ' ';
+                        }
+                        result += '\n';
+                    }
+                    return result;
+                }
+                //初始化状态颜色
+            Graph.prototype.initializeColor = function() {
+                    var color = [];
+                    for (var i = 0; i < this.vertexes.length; i++) {
+                        color[this.vertexes[i]] = 'white';
+                    }
+                    return color;
+                }
+                //广度优先搜索算法的思路
+                //从第一个顶点开始遍历图，先访问其所有的相邻点，就像一次访问图的一层
+                //换句话说就是先宽后深的访问顶点
+                //广度优先搜索的实现
+                //创建一个队列Q
+                //将V标注为被发现的（灰色） 并将v加入队列Q
+                //如果Q非空，执行以下操作
+                //将v从Q中取出队列
+                //将v标注为被发现的灰色
+                //将v所有的未被访问的邻接点（白色）加入到队列中
+                //将v标志为黑色
+                //实现BFS 广度优先搜索
+            Graph.prototype.bfs = function(initV, handler) {
+                    //1.初始化颜色
+                    var colors = this.initializeColor();
+                    //2.创建队列
+                    var queue = new Queue();
+                    //3. 将顶点加入到队列中
+                    queue.enqueue(initV);
+                    //4.循环从队列中取出元素
+                    while (!queue.isEmpty()) {
+                        //4.1从队列中取出一个顶点
+                        var v = queue.dequeue();
+                        //4.2 获取和顶点项链的另外顶点
+                        var vList = this.edges.get(v);
+                        //4.3 将v的颜色设置成灰色
+                        colors[v] = 'gray';
+                        console.log(colors)
+                            //4.4 遍历所有的顶点 并且加入到队列中
+                        for (var i = 0; i < vList.length; i++) {
+                            var e = vList[i]
+                            if (colors[e] == 'white') {
+                                colors[e] = 'gray';
+                                queue.enqueue(e)
+                            }
+                        }
+                        //4.5 访问顶点 
+                        handler(v)
+                            //4.6 将顶点设置为黑色
+                        colors[v] = 'black';
+                    }
+                }
+                //深度优先搜索dfs
+                //从第一个指定的顶点开始遍历图，沿着路径直到这条路径最后被访问了
+                //接着原路返回并搜索第一条路径
+                //深度优先搜索算法的实现
+                //广度优先搜索算法完美使用的是队列，这里可以用栈完成，也可以用递归
+                //方便代码书写，我们还是使用递归（递归本质上就是函数栈的调用) 
+            Graph.prototype.dfs = function(initV, handler) {
+                //1.初始化颜色
+                var colors = this.initializeColor();
+                //2.从某个顶点开始依次递归访问
+                this.dfsVisit(initV, colors, handler);
+            }
+            Graph.prototype.dfsVisit = function(v, colors, handler) {
+                //1.将颜色设置为灰色
+                colors[v] = 'gray';
+                //2. 处理v顶点
+                handler(v);
+                //3. 访问v相连的其他顶点
+                var vList = this.edges.get(v);
+                for (var i = 0; i < vList.length; i++) {
+                    var e = vList[i];
+                    if (colors[e] == 'white') {
+                        this.dfsVisit(e, colors, handler);
+                    }
+                }
+                //将v设置为黑色
+                colors[v] = 'black';
+                //
+
+            }
+
+        }
+
+        //测试代码
+        //1.创建图结构
+        var g = new Graph()
+
+        //2.添加顶点√
+        var myVertexes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+        for (var i = 0; i < myVertexes.length; i++) {
+            g.addVertex(myVertexes[i]);
+        }
+        //3.添加边
+        g.addEdge('A', 'B');
+        g.addEdge('A', 'C');
+        g.addEdge('A', 'D');
+        g.addEdge('C', 'D');
+        g.addEdge('C', 'G');
+        g.addEdge('D', 'G');
+        g.addEdge('D', 'H');
+        g.addEdge('B', 'E');
+        g.addEdge('B', 'F');
+        g.addEdge('E', 'I');
+
+        //4.测试结果
+        // alert(g);
+
+        // 5.测试bfs
+        var result = ''
+        g.bfs(g.vertexes[0], function(v) {
+                result += v + ' ';
+            })
+            // alert(result) abcdefghi
+        result = ''
+        g.dfs(g.vertexes[0], function(v) {
+            result += v + ' ';
+        })
+        alert(result);
+    </script>
+</body>
+
+</html>
